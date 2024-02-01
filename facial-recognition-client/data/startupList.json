@@ -1,0 +1,156 @@
+[
+    {
+        "Name": "Alexander Densley",
+        "Email": "densley.alexander@gmail.com",
+        "Phone": "5033969929",
+        "Team": "Talked",
+        "Image": ["alexanderdensley.jpg"]
+    },
+    {
+        "Name": "Devin Jernigan",
+        "Email": "jernigandevin@gmail.com",
+        "Phone": "(667) 777-3347",
+        "Team": "H",
+        "Image": ["devinjernigan.png"]
+    },
+    {
+        "Name": "Anton Marcus Alley",
+        "Email": "anton.alley@gmail.com",
+        "Phone": "(630) 943-0041",
+        "Team": "H",
+        "Image": ["antonalley.jpg"]
+    },
+    {
+        "Name": "Spencer Kunkel",
+        "Email": "sskunkel10sman@gmail.com",
+        "Phone": "4356400652",
+        "Team": "H",
+        "Image": ["spencerkunkel.jpg", "spencerkunkel2.png", "spencerkunkel3.png", "spencerkunkel4.png"]
+    },
+    {
+        "Name": "Jose Montoya",
+        "Email": "jsoccer96@gmail.com",
+        "Phone": "8019197321",
+        "Team": "AIVA",
+        "Image": ["josemontoya.jpg"]
+    },
+    {
+        "Name": "Aspen Fisher",
+        "Email": "aspen_fisher@outlook.com",
+        "Phone": "808-796-6830",
+        "Team": "AIVA",
+        "Image": ["aspenfisher.jpg"]
+    },
+    {
+        "Name": "Cannon Farr",
+        "Email": "c3farr@gmail.com",
+        "Phone": "(801) 404-8734",
+        "Team": "Conduit",
+        "Image": ["cannonfarr.jpg", "cannonfarr2.png"]
+    },
+    {
+        "Name": "Oakley Miller",
+        "Email": "oakstermiller@gmail.com",
+        "Phone": "8018503495",
+        "Team": "Nexa",
+        "Image": ["oakleymiller.jpg"]
+    },
+    {
+        "Name": "Sam Bennion",
+        "Email": "sambennion3@gmail.com",
+        "Phone": "3854445497",
+        "Team": "Ache",
+        "Image": ["sambenion.jpg", "sambenion2.png"]
+    },
+    {
+        "Name": "Timothy Brown",
+        "Email": "Tabrownies@gmail.com",
+        "Phone": "8012444883",
+        "Team": "TextIT",
+        "Image": ["timothybrown.jpg", "timothybrown2.png"]
+    },
+    {
+        "Name": "Gavin Shelley",
+        "Email": "gavinshelley3@gmail.com",
+        "Phone": "2085200869",
+        "Team": "PatentAI",
+        "Image": ["gavinshelley.jpg"]
+    },
+    {
+        "Name": "Dallin Bartholomew",
+        "Email": "dallinbart@gmail.com",
+        "Phone": "8014728094",
+        "Team": "StudAI",
+        "Image": ["dallinbartholomew.jpg"]
+    },
+    {
+        "Name": "Dallin Burningham",
+        "Email": "dallinjburningham@gmail.com",
+        "Phone": null,
+        "Team": "StudAI",
+        "Image": ["dallinburningham.jpg"]
+    },
+    {
+        "Name": "Benjamin Fisher",
+        "Email": "fisher.benjamin98@gmail.com",
+        "Phone": "8015161339",
+        "Team": "HuntRadio",
+        "Image": ["benjaminfisher.jpg"]
+    },
+    {
+        "Name": "Tanner King",
+        "Email": "king.tanner98@gmail.com",
+        "Phone": "801-382-9554",
+        "Team": "BULKD",
+        "Image": ["tannerking.jpg"]
+    },
+    {
+        "Name": "Xander Hunt",
+        "Email": "hunt.xander@gmail.com",
+        "Phone": "3195505781",
+        "Team": "BULKD",
+        "Image": ["xanderhunt.jpg", "xander2.png"]
+    },
+    {
+        "Name": "Jason Lowe",
+        "Email": "jason@sealowes.com",
+        "Phone": "425-614-9218",
+        "Team": "BULKD",
+        "Image": ["jasonlowe.jpg"]
+    },
+    {
+        "Name": "Adam Chandler ",
+        "Email": "adamchandler99@gmail.com",
+        "Phone": "8016943543",
+        "Team": "DD",
+        "Image": ["adamchandler.jpg", "adamchandler2.png"]
+    },
+    {
+        "Name": "Logan Orr",
+        "Email": "logan24orr@gmail.com",
+        "Phone": "8016543067",
+        "Team": "DD",
+        "Image": ["loganorr.jpg", "LoganOrr.jpeg"]
+    },
+    {
+        "Name": "Chad Sauder",
+        "Email": "chadsauder22@gmail.com",
+        "Phone": "(317) 931-8868",
+        "Team": "AuPair",
+        "Image": ["chadsauder.jpg"]
+    },
+    {
+        "Name": "Adam Rounsville",
+        "Email": "adamjrounsville@gmail.com",
+        "Phone": "5052733189",
+        "Team": "Stratus",
+        "Image": ["adamrounsville.jpg"]
+    },
+    {
+        "Name": "Cairo Murphy",
+        "Email": "murphyblue20@gmail.com",
+        "Phone": "8018146869",
+        "Team": "Stratus",
+        "Image": ["cairomurphy.jpg"]
+    }
+]
