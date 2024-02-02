@@ -1,0 +1,20 @@
+deepface @ git+https://github.com/Rooster-AI/rooster-deepface.git@34702da59c85435e9ce1786bbd27fdf5fde3b822
+dlib==19.24.2
+Flask==2.2.2
+keras==2.15.0
+mtcnn==0.1.1
+numpy==1.26.2
+oauthlib==3.2.2
+opencv-python==4.8.1.78
+pandas==2.1.1
+Pillow==10.1.0
+retina-face==0.0.13
+tensorboard==2.15.1
+tensorboard-data-server==0.7.1
+tensorflow==2.15.0
+tensorflow-estimator==2.15.0
+tensorflow-io-gcs-filesystem==0.34.0
+threadpoolctl==3.2.0
+torch==2.1.2
+torchvision==0.16.2
+tqdm==4.66.1
