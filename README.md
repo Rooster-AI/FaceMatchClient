@@ -17,3 +17,7 @@ Before running this server, ensure you have the following dependencies installed
 
    ```shell
    git clone https://github.com/Rooster-AI/FaceMatchClient.git
+2. Run setup.bash
+3. Set Regular git pull and database download:
+   a. crontab -e
+   b. add this line to the file: 0 3 * * * /path/to/your/bash/update.sh
