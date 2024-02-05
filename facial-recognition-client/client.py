@@ -8,6 +8,7 @@ import json
 import time
 import os
 import base64
+import queue
 import cv2
 from client_helper import RapidFaceFollow
 from deepface import DeepFace
@@ -35,7 +36,7 @@ def check_face(frame, send_signals, num):
             detector_backend="mtcnn",
             silent=True,
         )
-    except Exception as e:
+    except ValueError as e:
         print("No Match, signaling", e)
         send_signals.append("NO_MATCH")
     else:
@@ -92,7 +93,7 @@ def client():
             start_time = time.time()
             try:
                 frame = feed.read()
-            except Exception as e:
+            except queue.Empty as e:
                 print(e)
 
             if face_mode:
@@ -126,7 +127,7 @@ def client():
                 try:
                     faces = DeepFace.extract_faces(frame, detector_backend="opencv")
                     faces = [f for f in faces if f["confidence"] > 7]
-                except:
+                except ValueError:
                     pass
                 else:
                     if len(faces):
