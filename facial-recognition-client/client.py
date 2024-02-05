@@ -1,3 +1,8 @@
+"""
+This module contains a client script for capturing frames from a video feed and performing face recognition.
+The client captures frames and switches to face recognition mode when it detects faces in the frames.
+It uses the DeepFace library to perform face recognition and sends matched faces to a server.
+"""
 from concurrent.futures import ThreadPoolExecutor
 import json
 import cv2
@@ -13,9 +18,12 @@ os.chdir(os.path.dirname(__file__))
 CLOCK_TIME = 0.3
 FRAME_GROUP_SIZE = 12
 DB = "data/database"
-server_url = "http://127.0.0.1:5000/upload-images"
+SERVER_URL = "http://127.0.0.1:5000/upload-images"
 
 def check_face(frame, send_signals, num):
+    """
+    Perform face recognition on a given frame and update the send_signals list based on the result.
+    """
     try:
         result = DeepFace.find(
             img_path=frame,
@@ -43,6 +51,9 @@ def check_face(frame, send_signals, num):
     return
 
 def send_images(images):
+    """
+    Encode and send a group of images to the server.
+    """
     print("Start sending images")
     encoded_images = []
     for image in images:
@@ -51,7 +62,7 @@ def send_images(images):
         encoded_images.append(jt)
     data= json.dumps({"images":encoded_images})
     print('encoding done')
-    response = requests.post(server_url, data=data, headers={'Content-Type':'application/json'})
+    response = requests.post(SERVER_URL, data=data, headers={'Content-Type':'application/json'})
     if response.status_code == 200:
         result = response.json()
         print('status of post',result['status'])
@@ -115,7 +126,7 @@ def client():
                         face_mode = True
                         frame_group.append(frame)
 
-            left_time = CLOCK_TIME - (time.time() - start_time) 
+            left_time = CLOCK_TIME - (time.time() - start_time)
             if left_time > 0:
                 # print("extra time", left_time)
                 time.sleep(left_time)
