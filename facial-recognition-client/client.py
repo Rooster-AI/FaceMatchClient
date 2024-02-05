@@ -1,17 +1,17 @@
 """
-This module contains a client script for capturing frames from a video feed and performing face recognition.
-The client captures frames and switches to face recognition mode when it detects faces in the frames.
-It uses the DeepFace library to perform face recognition and sends matched faces to a server.
+Client script for capturing frames, performing face recognition, and sending results to a server
+Captures frames, switches to face recognition when faces are detected, and uses the DeepFace library
 """
+
 from concurrent.futures import ThreadPoolExecutor
 import json
+import time
+import os
+import base64
 import cv2
 from client_helper import RapidFaceFollow
 from deepface import DeepFace
-import time
-import os
 import requests
-import base64
 
 os.chdir(os.path.dirname(__file__))
 
@@ -19,6 +19,7 @@ CLOCK_TIME = 0.3
 FRAME_GROUP_SIZE = 12
 DB = "data/database"
 SERVER_URL = "http://127.0.0.1:5000/upload-images"
+
 
 def check_face(frame, send_signals, num):
     """
@@ -32,23 +33,24 @@ def check_face(frame, send_signals, num):
             distance_metric="cosine",
             enforce_detection=True,
             detector_backend="mtcnn",
-            silent=True
+            silent=True,
         )
     except Exception as e:
         print("No Match, signaling", e)
-        send_signals.append(f"NO_MATCH")
+        send_signals.append("NO_MATCH")
     else:
-        if len(result) > 0 and len(result[0]['identity'].to_list()) > 0:
-            print("Matched a face, preliminary match:", result[0]['identity'].to_list()[0])
-            send_signals.append(f"MATCHED")
+        if len(result) > 0 and len(result[0]["identity"].to_list()) > 0:
+            print(
+                "Matched a face, preliminary match:", result[0]["identity"].to_list()[0]
+            )
+            send_signals.append("MATCHED")
         else:
             print("No Faces Match, signaling")
-            send_signals.append(f"NO_MATCH")
+            send_signals.append("NO_MATCH")
     finally:
         print("Finished Matching")
         send_signals.append(f"FINISHED_{num}")
 
-    return
 
 def send_images(images):
     """
@@ -57,27 +59,33 @@ def send_images(images):
     print("Start sending images")
     encoded_images = []
     for image in images:
-        _, buffer = cv2.imencode('.jpg', image)
+        _, buffer = cv2.imencode(".jpg", image)
         jt = base64.b64encode(buffer).decode()
         encoded_images.append(jt)
-    data= json.dumps({"images":encoded_images})
-    print('encoding done')
-    response = requests.post(SERVER_URL, data=data, headers={'Content-Type':'application/json'})
+    data = json.dumps({"images": encoded_images})
+    print("encoding done")
+    response = requests.post(
+        SERVER_URL, data=data, headers={"Content-Type": "application/json"}, timeout=None
+    )
     if response.status_code == 200:
         result = response.json()
-        print('status of post',result['status'])
+        print("status of post", result["status"])
     else:
-        print('Error in post:', response.status_code)
-
-    return
+        print("Error in post:", response.status_code)
 
 
 def client():
-    # TODO: initialize arcface and mtcnn model
+    """
+    Main function for the client script. Captures video frames, performs face recognition,
+    and sends matched faces to a server.
+
+    This function initializes the video feed, monitors frames for face detection, and manages
+    the flow of capturing, recognizing, and sending frames.
+    """
     feed = RapidFaceFollow()
     face_mode = False
     frame_group = []
-    send_signals = [] # FINISHED_2 | FINSIHED_5 | NO_MATCH | MATCHED
+    send_signals = []  # FINISHED_2 | FINSIHED_5 | NO_MATCH | MATCHED
     with ThreadPoolExecutor(max_workers=2) as executor:
         print("Starting: Caputuring Frames")
         while True:
