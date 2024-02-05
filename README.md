@@ -21,3 +21,5 @@ Before running this server, ensure you have the following dependencies installed
 3. Set Regular git pull and database download:
    a. crontab -e
    b. add this line to the file: 0 3 * * * /path/to/your/bash/update.sh
+4. Make sure when making changes you branch from **staging**
+5. Make a pull request for your changes and have another dev review it
