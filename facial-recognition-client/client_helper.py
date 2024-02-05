@@ -1,14 +1,27 @@
+"""
+This module provides a class `RapidFaceFollow` for capturing video frames from an IP camera,
+keeping only the most recent frame, and making it available for further processing. It uses
+OpenCV to access the camera feed and manage the frame queue.
+"""
+
 import queue
-import cv2
 import threading
+import cv2
 
 
 class RapidFaceFollow:
+    """
+    RapidFaceFollow class
+    """
+
     def __init__(self):
         camera_ip = "192.168.0.222"
         username = "admin"
         password = "rooster1"
-        camera_url = f"rtsp://{username}:{password}@{camera_ip}:554/cam/realmonitor?channel=1&subtype=0"
+        camera_url = (
+            f"rtsp://{username}:{password}@{camera_ip}:554/cam/realmonitor"
+            "?channel=1&subtype=0"
+        )
         self.cap = cv2.VideoCapture(camera_url)
         self.q = queue.Queue()
         t = threading.Thread(target=self._reader)
@@ -23,10 +36,19 @@ class RapidFaceFollow:
                 break
             if not self.q.empty():
                 try:
-                    self.q.get_nowait()     # discard previous (unprocessed) frame
+                    self.q.get_nowait()  # discard previous (unprocessed) frame
                 except queue.Empty:
                     pass
             self.q.put(frame)
 
     def read(self):
+        """
+        Retrieve the most recent frame from the camera.
+        """
         return self.q.get()
+
+    def close(self):
+        """
+        Close the camera connection and release resources.
+        """
+        self.cap.release()
