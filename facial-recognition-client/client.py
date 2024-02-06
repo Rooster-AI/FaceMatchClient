@@ -18,7 +18,7 @@ import requests
 CLOCK_TIME = 0.3
 FRAME_GROUP_SIZE = 12
 DB = "data/database"
-SERVER_URL = "http://127.0.0.1:5000/upload-images"
+SERVER_URL = "http://192.168.0.16:5000/upload-images"
 
 
 def initialize_video_feed():
@@ -43,8 +43,8 @@ def check_face(frame, send_signals, num):
             detector_backend="mtcnn",
             silent=True,
         )
-    except ValueError as e:
-        print("No Match, signaling", e)
+    except ValueError:
+        print("No Match, signaling")
         send_signals.append("NO_MATCH")
     else:
         if len(result) > 0 and len(result[0]["identity"].to_list()) > 0:
@@ -93,8 +93,7 @@ def process_frame_for_face_recognition(
     """
     try:
         frame = feed.read()
-    except queue.Empty as e:
-        print(e)
+    except queue.Empty:
         return face_mode, frame_group, send_signals
 
     if face_mode:
@@ -108,7 +107,7 @@ def process_frame_for_face_recognition(
             print("Starting to check 5th frame")
             executor.submit(check_face, frame, send_signals, 5)
         elif group_size >= FRAME_GROUP_SIZE:
-            manage_communication_with_server(frame_group, send_signals, executor)
+            face_mode = manage_communication_with_server(frame_group, send_signals, executor)
     else:
         try:
             faces = DeepFace.extract_faces(frame, detector_backend="opencv")
@@ -129,15 +128,17 @@ def manage_communication_with_server(frame_group, send_signals, executor):
     if "FINISHED_2" in send_signals and "FINISHED_5" in send_signals:
         if "MATCHED" in send_signals:
             print("Matched, sending to server")
-            executor.submit(send_images, frame_group)
+            executor.submit(send_images, frame_group[:])
             frame_group.clear()
             send_signals.clear()
-        elif "NO_MATCH" in send_signals:
+            return True
+        if "NO_MATCH" in send_signals:
             print("Not matched, restarting")
             frame_group.clear()
             send_signals.clear()
-        else:
-            print("WAITING TO FINISH MATCHING")
+            return False
+    print("WAITING TO FINISH MATCHING")
+    return True
 
 
 def client():
@@ -155,7 +156,6 @@ def client():
             face_mode, frame_group, send_signals = process_frame_for_face_recognition(
                 feed, face_mode, frame_group, send_signals, executor
             )
-            manage_communication_with_server(frame_group, send_signals, executor)
 
             left_time = CLOCK_TIME - (time.time() - start_time)
             if left_time > 0:
