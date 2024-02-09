@@ -13,27 +13,27 @@ import cv2
 from client_helper import RapidFaceFollow
 from deepface import DeepFace
 import requests
-import logging
-from logging.handlers import RotatingFileHandler
+# import logging
+# from logging.handlers import RotatingFileHandler
 
-# Make sure the working directory is from this file
+# # Make sure the working directory is from this file
 os.chdir(os.path.dirname(__file__))
 
-# Create a logger
-logger = logging.getLogger('rooster_client')
-logger.setLevel(logging.INFO)
+# # Create a logger
+# logger = logging.getLogger('rooster_client')
+# logger.setLevel(logging.INFO)
 
-# Create a handler that writes log messages to a file, with a maximum
-# log file size of 5MB and keeping backup logs (e.g., 3 old log files).
-handler = RotatingFileHandler('rooster_client.log', maxBytes=5*1024*1024, backupCount=10)
-formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(message)s')
-handler.setFormatter(formatter)
+# # Create a handler that writes log messages to a file, with a maximum
+# # log file size of 5MB and keeping backup logs (e.g., 3 old log files).
+# handler = RotatingFileHandler('rooster_client.log', maxBytes=5*1024*1024, backupCount=10)
+# formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(message)s')
+# handler.setFormatter(formatter)
 
-# Add the handler to the logger
-logger.addHandler(handler)
+# # Add the handler to the logger
+# logger.addHandler(handler)
 
-# Now you can log messages
-logger.info('Start Client')
+# # Now you can log messages
+# #logger.info('Start Client')
 
 
 # Constants
@@ -48,7 +48,7 @@ def initialize_video_feed():
     Initializes the video feed for capturing frames.
     """
     feed = RapidFaceFollow()
-    logger.info("Feed Initialized")
+    #logger.info("Feed Initialized")
     return feed
 
 
@@ -67,19 +67,19 @@ def check_face(frame, send_signals, num):
             silent=True,
         )
     except ValueError:
-        logger.info("No Match, signaling")
+        #logger.info("No Match, signaling")
         send_signals.append("NO_MATCH")
     else:
         if len(result) > 0 and len(result[0]["identity"].to_list()) > 0:
-            logger.info(
-                "Matched a face, preliminary match:" + str(result[0]["identity"].to_list()[0])
-            )
+            #logger.info(
+            #     "Matched a face, preliminary match:" + str(result[0]["identity"].to_list()[0])
+            # )
             send_signals.append("MATCHED")
         else:
-            logger.info("No Faces Match, signaling")
+            #logger.info("No Faces Match, signaling")
             send_signals.append("NO_MATCH")
     finally:
-        logger.info("Finished Matching")
+        #logger.info("Finished Matching")
         send_signals.append(f"FINISHED_{num}")
 
 
@@ -87,13 +87,14 @@ def send_images(images):
     """
     Encode and send a group of images to the server.
     """
-    logger.info("Start sending images to server")
+    #logger.info("Start sending images to server")
     encoded_images = []
     for image in images:
         _, buffer = cv2.imencode(".jpg", image)
         encoded_image = base64.b64encode(buffer).decode()
         encoded_images.append(encoded_image)
     data = json.dumps({"images": encoded_images})
+    print("sending to server")
     response = requests.post(
         SERVER_URL,
         data=data,
@@ -102,9 +103,10 @@ def send_images(images):
     )
     if response.status_code == 200:
         result = response.json()
-        logger.info("Status from server" + str(result["status"]))
+        #logger.info("Status from server" + str(result["status"]))
     else:
-        logger.warning("Error in post to server:" +  str(response.status_code))
+        pass
+        # logger.warning("Error in post to server:" +  str(response.status_code))
 
 
 def process_frame_for_face_recognition(
@@ -123,10 +125,10 @@ def process_frame_for_face_recognition(
         if group_size < FRAME_GROUP_SIZE:
             frame_group.append(frame)
         if group_size == 2:
-            logger.debug("Starting to check 2nd frame")
+            # logger.debug("Starting to check 2nd frame")
             executor.submit(check_face, frame, send_signals, 2)
         elif group_size == 5:
-            logger.debug("Starting to check 5th frame")
+            # logger.debug("Starting to check 5th frame")
             executor.submit(check_face, frame, send_signals, 5)
         elif group_size >= FRAME_GROUP_SIZE:
             face_mode = manage_communication_with_server(frame_group, send_signals, executor)
@@ -134,7 +136,8 @@ def process_frame_for_face_recognition(
         try:
             faces = DeepFace.extract_faces(frame, detector_backend="opencv")
             if len(faces) > 0:
-                logger.debug("Starting Face Mode")
+                # logger.debug("Starting Face Mode")
+                print("Face found")
                 face_mode = True
                 frame_group.append(frame)
         except ValueError:
@@ -159,7 +162,7 @@ def manage_communication_with_server(frame_group, send_signals, executor):
             frame_group.clear()
             send_signals.clear()
             return False
-    print("WAITING TO FINISH MATCHING")
+    # print("WAITING TO FINISH MATCHING")
     return True
 
 
@@ -172,7 +175,7 @@ def client():
     frame_group = []
     send_signals = []
     with ThreadPoolExecutor(max_workers=2) as executor:
-        logger.info("Starting: Caputuring Frames")
+        #logger.info("Starting: Caputuring Frames")
         while True:
             start_time = time.time()
             face_mode, frame_group, send_signals = process_frame_for_face_recognition(
