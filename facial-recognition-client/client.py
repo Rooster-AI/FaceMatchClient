@@ -72,7 +72,7 @@ def check_face(frame, send_signals, num):
     else:
         if len(result) > 0 and len(result[0]["identity"].to_list()) > 0:
             logger.info(
-                "Matched a face, preliminary match:", result[0]["identity"].to_list()[0]
+                "Matched a face, preliminary match:" + str(result[0]["identity"].to_list()[0])
             )
             send_signals.append("MATCHED")
         else:
@@ -102,9 +102,9 @@ def send_images(images):
     )
     if response.status_code == 200:
         result = response.json()
-        logger.info("Status from server", result["status"])
+        logger.info("Status from server" + str(result["status"]))
     else:
-        logger.warning("Error in post to server:", response.status_code)
+        logger.warning("Error in post to server:" +  str(response.status_code))
 
 
 def process_frame_for_face_recognition(
