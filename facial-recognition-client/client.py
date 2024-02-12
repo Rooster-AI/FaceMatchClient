@@ -103,7 +103,8 @@ def send_images(images):
     )
     if response.status_code == 200:
         result = response.json()
-        #logger.info("Status from server" + str(result["status"]))
+        print(result)
+        # logger.info("Status from server" + str(result["status"]))
     else:
         pass
         # logger.warning("Error in post to server:" +  str(response.status_code))
