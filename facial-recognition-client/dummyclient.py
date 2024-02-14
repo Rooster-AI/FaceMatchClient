@@ -16,7 +16,7 @@ def send_images():
     """
     # read in images from dummy images folder
     images = []
-    for i in range(0, 7):
+    for i in range(0, 14):
         image = cv2.imread(f"data/dummy_images/frame_{i}.png")
         images.append(image)
 
