@@ -7,6 +7,10 @@ OpenCV to access the camera feed and manage the frame queue.
 import queue
 import threading
 import cv2
+import json
+import os
+
+os.chdir(os.path.dirname(__file__))
 
 
 class RapidFaceFollow:
@@ -15,12 +19,13 @@ class RapidFaceFollow:
     """
 
     def __init__(self):
-        camera_ip = "192.168.0.222"
-        username = "admin"
-        password = "rooster1"
+        # Load camera config from json
+        with open("rooster_config.json", "r") as f:
+            data = json.load(f)["camera-connection"]
+
         camera_url = (
-            f"rtsp://{username}:{password}@{camera_ip}:554/cam/realmonitor"
-            "?channel=1&subtype=0"
+            f'{data["protocol"]}://{data["camera_user"]}:{data["camera_pass"]}'
+            f'@{data["camera_ip"]}:{data["camera_port"]}{data["camera_extra_url"]}'
         )
         self.cap = cv2.VideoCapture(camera_url)
         self.q = queue.Queue()

@@ -10,14 +10,19 @@ import os
 import base64
 import queue
 import cv2
-from client_helper import RapidFaceFollow
 from deepface import DeepFace
 import requests
+
+os.chdir(os.path.dirname(__file__))
+from client_helper import RapidFaceFollow
+from remote_logger import log
+
+
 # import logging
 # from logging.handlers import RotatingFileHandler
 
 # # Make sure the working directory is from this file
-os.chdir(os.path.dirname(__file__))
+
 
 # # Create a logger
 # logger = logging.getLogger('rooster_client')
@@ -37,8 +42,10 @@ os.chdir(os.path.dirname(__file__))
 
 
 # Constants
-CLOCK_TIME = 0.3
+CLOCK_TIME = 0.4
 FRAME_GROUP_SIZE = 12
+MODEL = "ArcFace"
+BACKEND = "mtcnn"
 DB = "data/database"
 SERVER_URL = "http://192.168.0.16:5000/upload-images"
 
@@ -48,7 +55,7 @@ def initialize_video_feed():
     Initializes the video feed for capturing frames.
     """
     feed = RapidFaceFollow()
-    #logger.info("Feed Initialized")
+    # logger.info("Feed Initialized")
     return feed
 
 
@@ -60,26 +67,26 @@ def check_face(frame, send_signals, num):
         result = DeepFace.find(
             img_path=frame,
             db_path=DB,
-            model_name="ArcFace",
+            model_name=MODEL,
             distance_metric="cosine",
             enforce_detection=True,
-            detector_backend="yolov8",
+            detector_backend=BACKEND,
             silent=True,
         )
     except ValueError:
-        #logger.info("No Match, signaling")
+        # logger.info("No Match, signaling")
         send_signals.append("NO_MATCH")
     else:
         if len(result) > 0 and len(result[0]["identity"].to_list()) > 0:
-            #logger.info(
+            # logger.info(
             #     "Matched a face, preliminary match:" + str(result[0]["identity"].to_list()[0])
             # )
             send_signals.append("MATCHED")
         else:
-            #logger.info("No Faces Match, signaling")
+            # logger.info("No Faces Match, signaling")
             send_signals.append("NO_MATCH")
     finally:
-        #logger.info("Finished Matching")
+        # logger.info("Finished Matching")
         send_signals.append(f"FINISHED_{num}")
 
 
@@ -87,7 +94,7 @@ def send_images(images):
     """
     Encode and send a group of images to the server.
     """
-    #logger.info("Start sending images to server")
+    # logger.info("Start sending images to server")
     encoded_images = []
     for image in images:
         _, buffer = cv2.imencode(".jpg", image)
@@ -132,7 +139,9 @@ def process_frame_for_face_recognition(
             # logger.debug("Starting to check 5th frame")
             executor.submit(check_face, frame, send_signals, 5)
         elif group_size >= FRAME_GROUP_SIZE:
-            face_mode = manage_communication_with_server(frame_group, send_signals, executor)
+            face_mode = manage_communication_with_server(
+                frame_group, send_signals, executor
+            )
     else:
         try:
             faces = DeepFace.extract_faces(frame, detector_backend="opencv")
@@ -171,21 +180,27 @@ def client():
     """
     Main function for the client script.
     """
+    log("Initialized Client", "IMPORTANT")
     feed = initialize_video_feed()
     face_mode = False
     frame_group = []
     send_signals = []
-    with ThreadPoolExecutor(max_workers=2) as executor:
-        #logger.info("Starting: Caputuring Frames")
-        while True:
-            start_time = time.time()
-            face_mode, frame_group, send_signals = process_frame_for_face_recognition(
-                feed, face_mode, frame_group, send_signals, executor
-            )
+    try:
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            # logger.info("Starting: Caputuring Frames")
+            while True:
+                start_time = time.time()
+                face_mode, frame_group, send_signals = (
+                    process_frame_for_face_recognition(
+                        feed, face_mode, frame_group, send_signals, executor
+                    )
+                )
 
-            left_time = CLOCK_TIME - (time.time() - start_time)
-            if left_time > 0:
-                time.sleep(left_time)
+                left_time = CLOCK_TIME - (time.time() - start_time)
+                if left_time > 0:
+                    time.sleep(left_time)
+    except (KeyboardInterrupt, Exception) as e:
+        log("CLIENT DOWN" + str(e), "WARNING")
 
 
 if __name__ == "__main__":

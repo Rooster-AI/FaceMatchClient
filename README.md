@@ -23,3 +23,7 @@ Before running this server, ensure you have the following dependencies installed
    b. add this line to the file: 0 3 * * * /path/to/your/bash/update.sh
 4. Make sure when making changes you branch from **staging**
 5. Make a pull request for your changes and have another dev review it
+
+
+## Config
+rooster_config.json contains connection info for the camera, and also the device_id which should correspond to a client in the database

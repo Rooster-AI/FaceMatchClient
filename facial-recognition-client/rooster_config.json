@@ -1,0 +1,11 @@
+{
+    "camera-connection": {
+        "protocol": "rtsp",
+        "camera_ip": "192.168.0.222",
+        "camera_user": "admin",
+        "camera_pass": "rooster1",
+        "camera_port": "544",
+        "camera_extra_url": "/cam/realmonitor?channel=1&subtype=0"
+    },
+    "device_id": 1
+}
