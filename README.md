@@ -27,3 +27,5 @@ Before running this server, ensure you have the following dependencies installed
 
 ## Config
 rooster_config.json contains connection info for the camera, and also the device_id which should correspond to a client in the database
+
+
