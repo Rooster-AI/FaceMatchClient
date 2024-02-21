@@ -7,7 +7,10 @@ import base64
 import json
 import cv2
 import requests
+import time
 SERVER_URL = "http://127.0.0.1:5000/upload-images"
+
+CLOCK_TIME = 0.3
 
 
 def send_images():
@@ -15,6 +18,7 @@ def send_images():
     Encode and send a group of images to the server.
     """
     # read in images from dummy images folder
+    start_time = time.time()
     images = []
     for i in range(0, 14):
         image = cv2.imread(f"data/dummy_images/frame_{i}.png")
@@ -35,6 +39,8 @@ def send_images():
     except Exception as e:
         print("Failed to send images to server", e)
     print("Finished sending images")
+    print(f"Time to read in images: {time.time() - start_time}")
+
 
 if __name__ == "__main__":
     send_images()
