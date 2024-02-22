@@ -24,6 +24,17 @@ Before running this server, ensure you have the following dependencies installed
 4. Make sure when making changes you branch from **staging**
 5. Make a pull request for your changes and have another dev review it
 
+## Using Docker
+
+1. Build the docker image
+   - from the Rooster/FaceMatchClient dir run
+   ```shell
+   sudo docker build -t rooster-client .
+
+2. Run the docker image
+     ```shell
+      sudo docker run -it rooster-client
+
 
 ## Config
 rooster_config.json contains connection info for the camera, and also the device_id which should correspond to a client in the database
