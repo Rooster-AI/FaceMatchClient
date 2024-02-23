@@ -47,7 +47,9 @@ FRAME_GROUP_SIZE = 12
 MODEL = "ArcFace"
 BACKEND = "mtcnn"
 DB = "data/database"
-SERVER_URL = "http://192.168.0.16:5000/upload-images"
+SERVER_URL = "http://3.101.40.95:5000/upload-images"
+LOCAL_URL = "http://127.0.0.1:5000/upload-images"
+# SERVER_URL = LOCAL_URL
 
 
 def initialize_video_feed():
