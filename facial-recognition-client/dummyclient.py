@@ -8,7 +8,9 @@ import json
 import cv2
 import requests
 import time
-SERVER_URL = "http://127.0.0.1:5000/upload-images"
+SERVER_URL = "http://3.101.40.95:5000/upload-images"
+LOCAL_URL = "http://127.0.0.1:5000/upload-images"
+SERVER_URL = LOCAL_URL
 
 CLOCK_TIME = 0.3
 
