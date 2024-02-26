@@ -1,3 +1,4 @@
+# pylint: disable=W0718
 """
 A dummy client to test the server
 sends 1 group of images to the server
@@ -5,9 +6,9 @@ sends 1 group of images to the server
 
 import base64
 import json
+import time
 import cv2
 import requests
-import time
 SERVER_URL = "http://3.101.40.95:5000/upload-images"
 LOCAL_URL = "http://127.0.0.1:5000/upload-images"
 SERVER_URL = LOCAL_URL
@@ -36,7 +37,8 @@ def send_images():
         encoded_images.append(jt)
     data= json.dumps({"images":encoded_images})
     try:
-        response = requests.post(SERVER_URL, data=data, headers={'Content-Type':'application/json'})
+        response =requests.post(
+            SERVER_URL, data=data, headers={'Content-Type':'application/json'}, timeout=5)
         print(response.text)
     except Exception as e:
         print("Failed to send images to server", e)

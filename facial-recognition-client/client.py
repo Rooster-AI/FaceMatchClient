@@ -1,3 +1,4 @@
+# pylint: disable=C0413, W0718
 """
 Client script for capturing frames, performing face recognition, and sending results to a server
 Captures frames, switches to face recognition when faces are detected, and uses the DeepFace library

@@ -6,9 +6,9 @@ OpenCV to access the camera feed and manage the frame queue.
 
 import queue
 import threading
-import cv2
 import json
 import os
+import cv2
 
 os.chdir(os.path.dirname(__file__))
 
@@ -20,7 +20,7 @@ class RapidFaceFollow:
 
     def __init__(self):
         # Load camera config from json
-        with open("rooster_config.json", "r") as f:
+        with open("rooster_config.json", "r", encoding="utf-8") as f:
             data = json.load(f)["camera-connection"]
 
         camera_url = (
