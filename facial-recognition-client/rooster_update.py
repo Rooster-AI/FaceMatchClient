@@ -1,10 +1,10 @@
-# pylint: disable=W0718
+# pylint: disable=W0718, C0413
 """
     This is to update the database to the most recent representations
 """
 
-import requests
 import os
+import requests
 
 os.chdir(os.path.dirname(__file__))
 from remote_logger import log
