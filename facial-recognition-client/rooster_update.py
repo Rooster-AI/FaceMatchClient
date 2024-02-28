@@ -31,8 +31,13 @@ def update_database():
                 f.write(response.content)
 
             log(f"Successful database update {model}-{backend}")
+        
+        else:
+            log("Failed to update database", "WARNING")
+
     except Exception as e:
         log("Failed to update database" + str(e), "WARNING")
+
 
 
 if __name__ == "__main__":
