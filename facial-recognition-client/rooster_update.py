@@ -31,7 +31,7 @@ def update_database():
                 f.write(response.content)
 
             log(f"Successful database update {model}-{backend}")
-        
+
         else:
             log("Failed to update database", "WARNING")
 
