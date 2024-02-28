@@ -10,10 +10,10 @@ import time
 import cv2
 import requests
 
-SERVER_URL = "http://50.18.18.21:5000/upload-images"
+SERVER_URL = "http://13.56.83.102:5000/upload-images"
 
 LOCAL_URL = "http://127.0.0.1:5000/upload-images"
-SERVER_URL = LOCAL_URL
+# SERVER_URL = LOCAL_URL
 
 
 CLOCK_TIME = 0.3
