@@ -1,3 +1,4 @@
+# pylint: disable=W0718, R0903
 """
     Provides functions for logging to supabase
 """
@@ -11,13 +12,19 @@ DATABASE_URL = "http://localhost:5000"
 
 
 class Logger:
+    """
+    Does Remote Logging for the client device
+    """
     def __init__(self):
-        with open("rooster_config.json", "r") as f:
+        with open("rooster_config.json", "r", encoding="utf-8") as f:
             data = json.load(f)
 
         self.device_id = data["device_id"]
 
     def log(self, message, severity="INFO"):
+        """
+        Sends log to database
+        """
         print(severity + " : " + message)
         requests.post(
             url=DATABASE_URL + "/logging",
@@ -34,4 +41,7 @@ logger = Logger()
 
 
 def log(message, severity="INFO"):
+    """
+    Sends log to log file
+    """
     logger.log(message, severity)
