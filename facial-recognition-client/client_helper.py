@@ -38,12 +38,13 @@ class RapidFaceFollow:
         while True:
             ret, frame = self.cap.read()
             if not ret:
-                break
+                continue
             if not self.q.empty():
                 try:
                     self.q.get_nowait()  # discard previous (unprocessed) frame
                 except queue.Empty:
                     pass
+
             self.q.put(frame)
 
     def read(self):

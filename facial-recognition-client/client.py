@@ -77,7 +77,8 @@ def check_face(frame, send_signals, num):
             detector_backend=BACKEND,
             silent=True,
         )
-    except ValueError:
+    except ValueError as e:
+        print("Error in checking faces", e)
         # logger.info("No Match, signaling")
         send_signals.append("NO_MATCH")
     else:
@@ -131,7 +132,6 @@ def process_frame_for_face_recognition(
         frame = feed.read()
     except queue.Empty:
         return face_mode, frame_group, send_signals
-
     if face_mode:
         group_size = len(frame_group)
         if group_size < FRAME_GROUP_SIZE:
