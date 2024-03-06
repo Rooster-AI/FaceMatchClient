@@ -8,7 +8,7 @@ import os
 import requests
 
 os.chdir(os.path.dirname(__file__))
-DATABASE_URL = "http://localhost:5000"
+DATABASE_URL = "http://13.56.83.102:5000"
 
 
 class Logger:

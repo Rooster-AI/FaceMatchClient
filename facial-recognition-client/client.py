@@ -1,4 +1,4 @@
-# pylint: disable=C0413, W0718
+# pylint: disable=C0413, W0718, E1101
 """
 Client script for capturing frames, performing face recognition, and sending results to a server
 Captures frames, switches to face recognition when faces are detected, and uses the DeepFace library
@@ -48,9 +48,15 @@ FRAME_GROUP_SIZE = 12
 MODEL = "ArcFace"
 BACKEND = "mtcnn"
 DB = "data/database"
-SERVER_URL = "http://3.101.40.95:5000/upload-images"
+SERVER_URL = "http://13.56.83.102:5000/upload-images"
+
 LOCAL_URL = "http://127.0.0.1:5000/upload-images"
 # SERVER_URL = LOCAL_URL
+
+with open("rooster_config.json", "r", encoding="utf-8") as f:
+    config_data = json.load(f)
+
+DEVICE_ID = config_data["device_id"]
 
 
 def initialize_video_feed():
@@ -76,7 +82,8 @@ def check_face(frame, send_signals, num):
             detector_backend=BACKEND,
             silent=True,
         )
-    except ValueError:
+    except ValueError as e:
+        print("Error in checking faces", e)
         # logger.info("No Match, signaling")
         send_signals.append("NO_MATCH")
     else:
@@ -103,7 +110,7 @@ def send_images(images):
         _, buffer = cv2.imencode(".jpg", image)
         encoded_image = base64.b64encode(buffer).decode()
         encoded_images.append(encoded_image)
-    data = json.dumps({"images": encoded_images})
+    data = json.dumps({"images": encoded_images, "device_id": DEVICE_ID})
     print("sending to server")
     response = requests.post(
         SERVER_URL,
@@ -130,7 +137,6 @@ def process_frame_for_face_recognition(
         frame = feed.read()
     except queue.Empty:
         return face_mode, frame_group, send_signals
-
     if face_mode:
         group_size = len(frame_group)
         if group_size < FRAME_GROUP_SIZE:
