@@ -1,7 +1,7 @@
 FROM nvcr.io/nvidia/l4t-base:r36.2.0 as builder
 
 FROM python:3.9
-COPY --from=builder . .
+COPY --from=builder . /builder
 # Copy requirements file and install dependencies
 
 # Install dependencies individually to optimize caching
