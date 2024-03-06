@@ -26,7 +26,7 @@ jobs:
       # Build Docker image with multi-platform support
       - name: Build Docker Image
         run: |
-          docker buildx build --platform linux/amd64,linux/arm64 -t roosteradmin/rooster-client:latest .
+          docker buildx build --platform linux/arm64 -t roosteradmin/rooster-client:latest .
 
       # Login to Docker Hub and push the image
       - name: Login to Docker Hub and Push Image
