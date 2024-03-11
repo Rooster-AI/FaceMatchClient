@@ -172,12 +172,14 @@ def manage_communication_with_server(frame_group, send_signals, executor):
     if "FINISHED_2" in send_signals and "FINISHED_5" in send_signals:
         if "MATCHED" in send_signals:
             print("Matched, sending to server")
+            log(f"Matched, sending to server. DEVICE ID:{DEVICE_ID}", "INFO")
             executor.submit(send_images, frame_group[:])
             frame_group.clear()
             send_signals.clear()
             return True
         if "NO_MATCH" in send_signals:
             print("Not matched, restarting")
+            log(f"Not matched, restarting. DEVICE ID:{DEVICE_ID}", "INFO")
             frame_group.clear()
             send_signals.clear()
             return False
@@ -189,7 +191,7 @@ def client():
     """
     Main function for the client script.
     """
-    log("Initialized Client", "IMPORTANT")
+    log(f"Initialized Client. DEVICE ID:{DEVICE_ID}", "IMPORTANT")
     feed = initialize_video_feed()
     face_mode = False
     frame_group = []
@@ -209,7 +211,7 @@ def client():
                 if left_time > 0:
                     time.sleep(left_time)
     except (KeyboardInterrupt, Exception) as e:
-        log("CLIENT DOWN" + str(e), "WARNING")
+        log(f"CLIENT DOWN. DEVICE ID:{DEVICE_ID}" + str(e), "WARNING")
 
 
 if __name__ == "__main__":
