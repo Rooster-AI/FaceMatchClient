@@ -1,21 +1,21 @@
-# name: Docker Build and Push
+name: Docker Build and Push
 
-# on:
-#   push:
-#     branches:
-#       - main
+on:
+  push:
+    branches:
+      - main
 
-# jobs:
-#   build-and-push:
-#     name: Build and Push Docker Image
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout Repository
-#         uses: actions/checkout@v2
+jobs:
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-#       # If you have Dockerfile in the root directory
-#       - name: Build Docker Image
-#         run: docker build -t roosteradmin/rooster-client:latest .
+      # If you have Dockerfile in the root directory
+      - name: Build Docker Image
+        run: docker build -t roosteradmin/rooster-client:latest .
 
       # Login to Docker Hub and push the image
       - name: Login to Docker Hub and Push Image

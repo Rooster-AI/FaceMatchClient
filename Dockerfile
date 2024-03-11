@@ -17,4 +17,3 @@ COPY facial-recognition-client facial-recognition-client
 
 # Command to run your program
 CMD ["python", "facial-recognition-client/client.py"]
-
