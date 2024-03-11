@@ -1,7 +1,7 @@
 FROM nvcr.io/nvidia/l4t-tensorflow:r32.7.1-tf2.7-py3
 
 # Install dependencies individually to optimize caching
-RUN pip install "git+https://github.com/Rooster-Ai/rooster-deepface.git"
+RUN pip3 install "git+https://github.com/Rooster-Ai/rooster-deepface.git"
 RUN pip install Flask==2.2.2
 RUN pip install numpy==1.26.2
 RUN pip install opencv-python-headless
