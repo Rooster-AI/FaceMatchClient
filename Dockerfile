@@ -15,5 +15,11 @@ RUN pip install Pillow==10.1.0
 # Copy your code into the container
 COPY facial-recognition-client facial-recognition-client
 
-# Command to run your program
-CMD ["python", "facial-recognition-client/client.py"]
+# Copy the entry point script into the container
+COPY entrypoint.sh /entrypoint.sh
+
+# Make entry point script executable
+RUN chmod +x /entrypoint.sh
+
+# Set the entry point to the custom entry point script
+ENTRYPOINT ["/entrypoint.sh"]

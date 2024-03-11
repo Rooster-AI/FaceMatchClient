@@ -8,6 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 import json
 import time
 import os
+import sys
 import base64
 import queue
 import cv2
@@ -51,7 +52,6 @@ DB = "data/database"
 SERVER_URL = "http://13.56.83.102:5000/upload-images"
 
 LOCAL_URL = "http://127.0.0.1:5000/upload-images"
-# SERVER_URL = LOCAL_URL
 
 with open("rooster_config.json", "r", encoding="utf-8") as f:
     config_data = json.load(f)
@@ -59,11 +59,11 @@ with open("rooster_config.json", "r", encoding="utf-8") as f:
 DEVICE_ID = config_data["device_id"]
 
 
-def initialize_video_feed():
+def initialize_video_feed(config_path):
     """
     Initializes the video feed for capturing frames.
     """
-    feed = RapidFaceFollow()
+    feed = RapidFaceFollow(config_path)
     # logger.info("Feed Initialized")
     return feed
 
@@ -185,12 +185,12 @@ def manage_communication_with_server(frame_group, send_signals, executor):
     return True
 
 
-def client():
+def client(config_path):
     """
     Main function for the client script.
     """
     log("Initialized Client", "IMPORTANT")
-    feed = initialize_video_feed()
+    feed = initialize_video_feed(config_path)
     face_mode = False
     frame_group = []
     send_signals = []
@@ -213,4 +213,8 @@ def client():
 
 
 if __name__ == "__main__":
-    client()
+    if len(sys.argv) < 2:
+        print("Usage: python client.py /path/to/camera.json")
+        sys.exit(1)
+    config_file_path = sys.argv[1]
+    client(config_file_path)

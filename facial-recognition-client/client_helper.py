@@ -18,9 +18,9 @@ class RapidFaceFollow:
     RapidFaceFollow class
     """
 
-    def __init__(self):
+    def __init__(self, config_file_path):
         # Load camera config from json
-        with open("rooster_config.json", "r", encoding="utf-8") as f:
+        with open(config_file_path, "r", encoding="utf-8") as f:
             data = json.load(f)["camera-connection"]
 
         camera_url = (
