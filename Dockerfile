@@ -1,5 +1,4 @@
 FROM python:3.9
-
 # Copy requirements file and install dependencies
 
 # Install dependencies individually to optimize caching
