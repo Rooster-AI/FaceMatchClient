@@ -1,5 +1,7 @@
+FROM nvcr.io/nvidia/l4t-base:r36.2.0 as builder
+
 FROM python:3.9
-# Copy requirements file and install dependencies
+COPY --from=builder . /builder
 
 # Install dependencies individually to optimize caching
 RUN pip install "git+https://github.com/Rooster-Ai/rooster-deepface.git"
