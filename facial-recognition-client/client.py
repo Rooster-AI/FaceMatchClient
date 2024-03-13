@@ -219,5 +219,5 @@ if __name__ == "__main__":
     if len(sys.argv) != 7:
         print("Needs args: protocol camera_user camera_pass camera_ip camera_port camera_extra_url")
         sys.exit(1)
-    protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url, _ = sys.argv[1:]
-    client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url)
+    prot, cam_usr, cam_pass, cam_ip, cam_port, cam_url, _ = sys.argv[1:]
+    client(prot, cam_usr, cam_pass, cam_ip, cam_port, cam_url)
