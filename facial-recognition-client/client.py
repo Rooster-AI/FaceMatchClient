@@ -185,12 +185,12 @@ def manage_communication_with_server(frame_group, send_signals, executor):
     return True
 
 
-def client(config_path):
+def client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url):
     """
     Main function for the client script.
     """
     log("Initialized Client", "IMPORTANT")
-    feed = initialize_video_feed(config_path)
+    feed = initialize_video_feed(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url)
     face_mode = False
     frame_group = []
     send_signals = []
@@ -213,8 +213,8 @@ def client(config_path):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python client.py /path/to/camera.json")
+    if len(sys.argv) != 7:
+        print("Needs args: protocol camera_user camera_pass camera_ip camera_port camera_extra_url")
         sys.exit(1)
-    config_file_path = sys.argv[1]
-    client(config_file_path)
+    protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url = sys.argv[1:]
+    client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url)
