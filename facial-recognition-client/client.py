@@ -1,4 +1,4 @@
-# pylint: disable=C0413, W0718, E1101
+# pylint: disable=C0413, W0718, E1101, C0301
 """
 Client script for capturing frames, performing face recognition, and sending results to a server
 Captures frames, switches to face recognition when faces are detected, and uses the DeepFace library
@@ -185,7 +185,7 @@ def manage_communication_with_server(frame_group, send_signals, executor):
     return True
 
 
-def client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url):
+def client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url, device_id):
     """
     Main function for the client script.
     """
@@ -217,5 +217,5 @@ if __name__ == "__main__":
     if len(sys.argv) != 7:
         print("Needs args: protocol camera_user camera_pass camera_ip camera_port camera_extra_url")
         sys.exit(1)
-    protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url = sys.argv[1:]
-    client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url)
+    protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url, device_id = sys.argv[1:]
+    client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url, device_id)
