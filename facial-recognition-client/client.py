@@ -56,8 +56,6 @@ LOCAL_URL = "http://127.0.0.1:5000/upload-images"
 with open("rooster_config.json", "r", encoding="utf-8") as f:
     config_data = json.load(f)
 
-DEVICE_ID = config_data["device_id"]
-
 
 def initialize_video_feed(config_path):
     """
@@ -172,12 +170,14 @@ def manage_communication_with_server(frame_group, send_signals, executor):
     if "FINISHED_2" in send_signals and "FINISHED_5" in send_signals:
         if "MATCHED" in send_signals:
             print("Matched, sending to server")
+            log(f"Matched, sending to server. DEVICE ID:{DEVICE_ID}", "INFO")
             executor.submit(send_images, frame_group[:])
             frame_group.clear()
             send_signals.clear()
             return True
         if "NO_MATCH" in send_signals:
             print("Not matched, restarting")
+            log(f"Not matched, restarting. DEVICE ID:{DEVICE_ID}", "INFO")
             frame_group.clear()
             send_signals.clear()
             return False
@@ -189,8 +189,9 @@ def client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_ex
     """
     Main function for the client script.
     """
-    log("Initialized Client", "IMPORTANT")
+    log(f"Initialized Client. DEVICE ID:{device_id}", "IMPORTANT")
     feed = initialize_video_feed(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url)
+
     face_mode = False
     frame_group = []
     send_signals = []
@@ -209,7 +210,7 @@ def client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_ex
                 if left_time > 0:
                     time.sleep(left_time)
     except (KeyboardInterrupt, Exception) as e:
-        log("CLIENT DOWN" + str(e), "WARNING")
+        log(f"CLIENT DOWN. DEVICE ID:{DEVICE_ID}" + str(e), "WARNING")
 
 
 if __name__ == "__main__":
