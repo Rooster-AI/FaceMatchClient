@@ -53,15 +53,17 @@ SERVER_URL = "http://13.56.83.102:5000/upload-images"
 
 LOCAL_URL = "http://127.0.0.1:5000/upload-images"
 
+DEVICE_ID = sys.argv[-1]
+
 with open("rooster_config.json", "r", encoding="utf-8") as f:
     config_data = json.load(f)
 
 
-def initialize_video_feed(config_path):
+def initialize_video_feed(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url):
     """
     Initializes the video feed for capturing frames.
     """
-    feed = RapidFaceFollow(config_path)
+    feed = RapidFaceFollow(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url)
     # logger.info("Feed Initialized")
     return feed
 
@@ -185,11 +187,11 @@ def manage_communication_with_server(frame_group, send_signals, executor):
     return True
 
 
-def client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url, device_id):
+def client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url):
     """
     Main function for the client script.
     """
-    log(f"Initialized Client. DEVICE ID:{device_id}", "IMPORTANT")
+    log(f"Initialized Client. DEVICE ID:{DEVICE_ID}", "IMPORTANT")
     feed = initialize_video_feed(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url)
 
     face_mode = False
@@ -217,5 +219,5 @@ if __name__ == "__main__":
     if len(sys.argv) != 7:
         print("Needs args: protocol camera_user camera_pass camera_ip camera_port camera_extra_url")
         sys.exit(1)
-    protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url, device_id = sys.argv[1:]
-    client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url, device_id)
+    protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url, _ = sys.argv[1:]
+    client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url)
