@@ -1,4 +1,4 @@
-# pylint: disable=C0413, W0718, E1101
+# pylint: disable=C0413, W0718, E1101, C0301, R0913
 """
 Client script for capturing frames, performing face recognition, and sending results to a server
 Captures frames, switches to face recognition when faces are detected, and uses the DeepFace library
@@ -8,6 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 import json
 import time
 import os
+import sys
 import base64
 import queue
 import cv2
@@ -51,19 +52,18 @@ DB = "data/database"
 SERVER_URL = "http://13.56.83.102:5000/upload-images"
 
 LOCAL_URL = "http://127.0.0.1:5000/upload-images"
-# SERVER_URL = LOCAL_URL
+
+DEVICE_ID = sys.argv[-1]
 
 with open("rooster_config.json", "r", encoding="utf-8") as f:
     config_data = json.load(f)
 
-DEVICE_ID = config_data["device_id"]
 
-
-def initialize_video_feed():
+def initialize_video_feed(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url):
     """
     Initializes the video feed for capturing frames.
     """
-    feed = RapidFaceFollow()
+    feed = RapidFaceFollow(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url)
     # logger.info("Feed Initialized")
     return feed
 
@@ -187,12 +187,13 @@ def manage_communication_with_server(frame_group, send_signals, executor):
     return True
 
 
-def client():
+def client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url):
     """
     Main function for the client script.
     """
     log(f"Initialized Client. DEVICE ID:{DEVICE_ID}", "IMPORTANT")
-    feed = initialize_video_feed()
+    feed = initialize_video_feed(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url)
+
     face_mode = False
     frame_group = []
     send_signals = []
@@ -215,4 +216,8 @@ def client():
 
 
 if __name__ == "__main__":
-    client()
+    if len(sys.argv) != 7:
+        print("Needs args: protocol camera_user camera_pass camera_ip camera_port camera_extra_url")
+        sys.exit(1)
+    prot, cam_usr, cam_pass, cam_ip, cam_port, cam_url, _ = sys.argv[1:]
+    client(prot, cam_usr, cam_pass, cam_ip, cam_port, cam_url)
