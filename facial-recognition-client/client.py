@@ -8,7 +8,6 @@ from concurrent.futures import ThreadPoolExecutor
 import json
 import time
 import os
-import sys
 import base64
 import queue
 import cv2
@@ -82,8 +81,8 @@ def check_face(frame, send_signals, num):
             detector_backend=BACKEND,
             silent=True,
         )
-    except ValueError as e:
-        print("Error in checking faces", e)
+    except ValueError as exp:
+        print("Error in checking faces", exp)
         # logger.info("No Match, signaling")
         send_signals.append("NO_MATCH")
     else:
@@ -211,31 +210,31 @@ def client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_ex
                 left_time = CLOCK_TIME - (time.time() - start_time)
                 if left_time > 0:
                     time.sleep(left_time)
-    except (KeyboardInterrupt, Exception) as e:
-        log(f"CLIENT DOWN. DEVICE ID:{DEVICE_ID}" + str(e), "WARNING")
+    except (KeyboardInterrupt, Exception) as exp:
+        log(f"CLIENT DOWN. DEVICE ID:{DEVICE_ID}" + str(exp), "WARNING")
 
 
 if __name__ == "__main__":
-    required_env_vars = ['PROTOCOL', 'CAMERA_IP', 'CAMERA_USER', 'CAMERA_PASS', 
+    required_env_vars = ['PROTOCOL', 'CAMERA_IP', 'CAMERA_USER', 'CAMERA_PASS',
                      'CAMERA_PORT', 'CAMERA_EXTRA_URL', 'DEVICE_ID']
 
     missing_vars = [var for var in required_env_vars if os.environ.get(var) is None]
-    
+
     if missing_vars:
         raise EnvironmentError(f"The following environment variables are missing: {', '.join(missing_vars)}")
 
-    protocol = os.environ['PROTOCOL']
-    camera_ip = os.environ['CAMERA_IP']
-    camera_user = os.environ['CAMERA_USER']
-    camera_pass = os.environ['CAMERA_PASS']
-    camera_port = os.environ['CAMERA_PORT']
-    camera_extra_url = os.environ['CAMERA_EXTRA_URL']
+    prot = os.environ['PROTOCOL']
+    cam_ip = os.environ['CAMERA_IP']
+    cam_user = os.environ['CAMERA_USER']
+    cam_pass = os.environ['CAMERA_PASS']
+    cam_port = os.environ['CAMERA_PORT']
+    cam_extra_url = os.environ['CAMERA_EXTRA_URL']
 
-    print("Protocol:", protocol)
-    print("Camera IP:", camera_ip)
-    print("Camera User:", camera_user)
-    print("Camera Pass:", camera_pass)
-    print("Camera Port:", camera_port)
-    print("Camera Extra URL:", camera_extra_url)
-    
-    client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url)
+    print("Protocol:", prot)
+    print("Camera IP:", cam_ip)
+    print("Camera User:", cam_user)
+    print("Camera Pass:", cam_pass)
+    print("Camera Port:", cam_port)
+    print("Camera Extra URL:", cam_extra_url)
+
+    client(prot, cam_user, cam_pass, cam_ip, cam_port, cam_extra_url)
