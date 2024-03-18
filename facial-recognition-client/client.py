@@ -230,5 +230,12 @@ if __name__ == "__main__":
     camera_pass = os.environ['CAMERA_PASS']
     camera_port = os.environ['CAMERA_PORT']
     camera_extra_url = os.environ['CAMERA_EXTRA_URL']
+
+    print("Protocol:", protocol)
+    print("Camera IP:", camera_ip)
+    print("Camera User:", camera_user)
+    print("Camera Pass:", camera_pass)
+    print("Camera Port:", camera_port)
+    print("Camera Extra URL:", camera_extra_url)
     
     client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url)
