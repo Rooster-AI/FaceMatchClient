@@ -25,6 +25,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker buildx build --platform linux/arm64/v8 -t roosteradmin/rooster-client:latest .
+          docker images
 
       # Login to Docker Hub and push the image
       - name: Login to Docker Hub and Push Image
