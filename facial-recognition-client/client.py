@@ -53,7 +53,7 @@ SERVER_URL = "http://13.56.83.102:5000/upload-images"
 
 LOCAL_URL = "http://127.0.0.1:5000/upload-images"
 
-DEVICE_ID = sys.argv[-1]
+DEVICE_ID = os.environ['DEVICE_ID']
 
 with open("rooster_config.json", "r", encoding="utf-8") as f:
     config_data = json.load(f)
@@ -216,8 +216,19 @@ def client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_ex
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 7:
-        print("Needs args: protocol camera_user camera_pass camera_ip camera_port camera_extra_url")
-        sys.exit(1)
-    prot, cam_usr, cam_pass, cam_ip, cam_port, cam_url, _ = sys.argv[1:]
-    client(prot, cam_usr, cam_pass, cam_ip, cam_port, cam_url)
+    required_env_vars = ['PROTOCOL', 'CAMERA_IP', 'CAMERA_USER', 'CAMERA_PASS', 
+                     'CAMERA_PORT', 'CAMERA_EXTRA_URL', 'DEVICE_ID']
+
+    missing_vars = [var for var in required_env_vars if os.environ.get(var) is None]
+    
+    if missing_vars:
+        raise EnvironmentError(f"The following environment variables are missing: {', '.join(missing_vars)}")
+
+    protocol = os.environ['PROTOCOL']
+    camera_ip = os.environ['CAMERA_IP']
+    camera_user = os.environ['CAMERA_USER']
+    camera_pass = os.environ['CAMERA_PASS']
+    camera_port = os.environ['CAMERA_PORT']
+    camera_extra_url = os.environ['CAMERA_EXTRA_URL']
+    
+    client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url)

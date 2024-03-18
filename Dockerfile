@@ -1,6 +1,8 @@
-FROM nvcr.io/nvidia/l4t-tensorflow:r32.7.1-tf2.7-py3
+FROM nvcr.io/nvidia/l4t-tensorflow:r32.7.1-tf2.7-py3 as builder
 
 FROM python:3.9
+
+COPY --from=builder . /builder
 
 # Install Git
 RUN apt-get update && \
@@ -19,5 +21,4 @@ RUN pip3 install Pillow==10.1.0
 # Copy your code into the container
 COPY facial-recognition-client facial-recognition-client
 
-# Set the entry point to the custom entry point script
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["python", "facial-recognition-client/client.py"]
