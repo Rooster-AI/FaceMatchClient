@@ -1,4 +1,4 @@
-# pylint: disable=C0413, W0718
+# pylint: disable=C0413, W0718, E1101, C0301, R0913
 """
 Client script for capturing frames, performing face recognition, and sending results to a server
 Captures frames, switches to face recognition when faces are detected, and uses the DeepFace library
@@ -51,14 +51,18 @@ DB = "data/database"
 SERVER_URL = "http://13.56.83.102:5000/upload-images"
 
 LOCAL_URL = "http://127.0.0.1:5000/upload-images"
-# SERVER_URL = LOCAL_URL
+
+DEVICE_ID = os.environ['DEVICE_ID']
+
+with open("rooster_config.json", "r", encoding="utf-8") as f:
+    config_data = json.load(f)
 
 
-def initialize_video_feed():
+def initialize_video_feed(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url):
     """
     Initializes the video feed for capturing frames.
     """
-    feed = RapidFaceFollow()
+    feed = RapidFaceFollow(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url)
     # logger.info("Feed Initialized")
     return feed
 
@@ -77,8 +81,8 @@ def check_face(frame, send_signals, num):
             detector_backend=BACKEND,
             silent=True,
         )
-    except ValueError as e:
-        print("Error in checking faces", e)
+    except ValueError as exp:
+        print("Error in checking faces", exp)
         # logger.info("No Match, signaling")
         send_signals.append("NO_MATCH")
     else:
@@ -105,7 +109,7 @@ def send_images(images):
         _, buffer = cv2.imencode(".jpg", image)
         encoded_image = base64.b64encode(buffer).decode()
         encoded_images.append(encoded_image)
-    data = json.dumps({"images": encoded_images})
+    data = json.dumps({"images": encoded_images, "device_id": DEVICE_ID})
     print("sending to server")
     response = requests.post(
         SERVER_URL,
@@ -167,12 +171,14 @@ def manage_communication_with_server(frame_group, send_signals, executor):
     if "FINISHED_2" in send_signals and "FINISHED_5" in send_signals:
         if "MATCHED" in send_signals:
             print("Matched, sending to server")
+            log(f"Matched, sending to server. DEVICE ID:{DEVICE_ID}", "INFO")
             executor.submit(send_images, frame_group[:])
             frame_group.clear()
             send_signals.clear()
             return True
         if "NO_MATCH" in send_signals:
             print("Not matched, restarting")
+            log(f"Not matched, restarting. DEVICE ID:{DEVICE_ID}", "INFO")
             frame_group.clear()
             send_signals.clear()
             return False
@@ -180,12 +186,13 @@ def manage_communication_with_server(frame_group, send_signals, executor):
     return True
 
 
-def client():
+def client(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url):
     """
     Main function for the client script.
     """
-    log("Initialized Client", "IMPORTANT")
-    feed = initialize_video_feed()
+    log(f"Initialized Client. DEVICE ID:{DEVICE_ID}", "IMPORTANT")
+    feed = initialize_video_feed(protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url)
+
     face_mode = False
     frame_group = []
     send_signals = []
@@ -203,9 +210,31 @@ def client():
                 left_time = CLOCK_TIME - (time.time() - start_time)
                 if left_time > 0:
                     time.sleep(left_time)
-    except (KeyboardInterrupt, Exception) as e:
-        log("CLIENT DOWN" + str(e), "WARNING")
+    except (KeyboardInterrupt, Exception) as exp:
+        log(f"CLIENT DOWN. DEVICE ID:{DEVICE_ID}" + str(exp), "WARNING")
 
 
 if __name__ == "__main__":
-    client()
+    required_env_vars = ['PROTOCOL', 'CAMERA_IP', 'CAMERA_USER', 'CAMERA_PASS',
+                     'CAMERA_PORT', 'CAMERA_EXTRA_URL', 'DEVICE_ID']
+
+    missing_vars = [var for var in required_env_vars if os.environ.get(var) is None]
+
+    if missing_vars:
+        raise EnvironmentError(f"The following environment variables are missing: {', '.join(missing_vars)}")
+
+    prot = os.environ['PROTOCOL']
+    cam_ip = os.environ['CAMERA_IP']
+    cam_user = os.environ['CAMERA_USER']
+    cam_pass = os.environ['CAMERA_PASS']
+    cam_port = os.environ['CAMERA_PORT']
+    cam_extra_url = os.environ['CAMERA_EXTRA_URL']
+
+    print("Protocol:", prot)
+    print("Camera IP:", cam_ip)
+    print("Camera User:", cam_user)
+    print("Camera Pass:", cam_pass)
+    print("Camera Port:", cam_port)
+    print("Camera Extra URL:", cam_extra_url)
+
+    client(prot, cam_user, cam_pass, cam_ip, cam_port, cam_extra_url)

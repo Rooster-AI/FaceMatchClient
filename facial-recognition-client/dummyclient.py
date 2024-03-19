@@ -1,4 +1,6 @@
+
 # pylint: disable=W0718,E1101,C0103
+
 """
 A dummy client to test the server
 sends 1 group of images to the server
@@ -34,13 +36,19 @@ def send_images(url):
     print("Start sending images")
     encoded_images = []
     for image in images:
-        _, buffer = cv2.imencode('.jpg', image)
+        _, buffer = cv2.imencode(".jpg", image)
         jt = base64.b64encode(buffer).decode()
         encoded_images.append(jt)
-    data = json.dumps({ "images":encoded_images, "device_id": -1})
+
+    data = json.dumps({"images": encoded_images, "device_id": 1})
     try:
-        response =requests.post(
-            url, data=data, headers={'Content-Type':'application/json'}, timeout=5)
+        response = requests.post(
+            SERVER_URL,
+            data=data,
+            headers={"Content-Type": "application/json"},
+            timeout=5,
+        )
+
         print(response.text)
     except Exception as exp:
         print("Failed to send images to server", exp)
