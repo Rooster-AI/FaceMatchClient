@@ -43,7 +43,7 @@ def send_images(url):
     data = json.dumps({"images": encoded_images, "device_id": 1})
     try:
         response = requests.post(
-            SERVER_URL,
+            url,
             data=data,
             headers={"Content-Type": "application/json"},
             timeout=5,
