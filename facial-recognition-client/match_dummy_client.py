@@ -30,7 +30,7 @@ def send_images(url):
     start_time = time.time()
     images = []
     for i in range(0, 14):
-        image = cv2.imread(f"data/dummy_images/frame_{i}.png")
+        image = cv2.imread(f"data/match_dummy_images/frame_{i}.png")
         images.append(image)
 
     print("Start sending images")
