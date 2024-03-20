@@ -21,7 +21,7 @@ jobs:
         pip install opencv-python
         pip install deepface
         pip install requests
-        pip install schudule
+        pip install schedule
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py') --disable=e1101
