@@ -17,8 +17,9 @@ RUN pip3 install numpy==1.26.2
 RUN pip3 install opencv-python-headless
 RUN pip3 install pandas==2.1.1
 RUN pip3 install Pillow==10.1.0
+RUN pip3 install schedule==1.2.1
 
 # Copy your code into the container
 COPY facial-recognition-client facial-recognition-client
 
-CMD ["python", "facial-recognition-client/client.py"]
+CMD ["python", "facial-recognition-client/client.py", "&", "python", "facial-recognition-client/rooster_update.py"]
