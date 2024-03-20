@@ -22,15 +22,20 @@ LOCAL_URL = "http://127.0.0.1:5000/upload-images"
 CLOCK_TIME = 0.3
 
 
-def send_images(url):
+def send_images(url, match=True):
     """
     Encode and send a group of images to the server.
     """
     # read in images from dummy images folder
     start_time = time.time()
     images = []
-    for i in range(0, 14):
-        image = cv2.imread(f"data/match_dummy_images/frame_{i}.png")
+    path = "data/match_dummy_images/frame_"
+    num_images = 14
+    if not match:
+        path = "data/nonmatch_dummy_images/frame_"
+        num_images = 13
+    for i in range(0, num_images):
+        image = cv2.imread(f"{path}{i}.png")
         images.append(image)
 
     print("Start sending images")
@@ -59,8 +64,12 @@ def send_images(url):
 if __name__ == "__main__":
     # if "local" was passed in as an argument, use the local server
     url_ = SERVER_URL
+    match = True
     if "local" in sys.argv:
         print("Using local server")
         url_ = LOCAL_URL
 
-    send_images(url_)
+    if "nonmatch" in sys.argv:
+        match = False
+
+    send_images(url_, match=match)
