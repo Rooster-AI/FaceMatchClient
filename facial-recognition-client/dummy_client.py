@@ -31,11 +31,14 @@ def send_images(url, match=True):
     images = []
     path = "data/match_dummy_images/frame_"
     num_images = 14
+    file_type = '.png'
     if not match:
         path = "data/nonmatch_dummy_images/frame_"
         num_images = 13
+        file_type = '.jpg'
+
     for i in range(0, num_images):
-        image = cv2.imread(f"{path}{i}.png")
+        image = cv2.imread(f"{path}{i}{file_type}")
         images.append(image)
 
     print("Start sending images")
@@ -64,12 +67,12 @@ def send_images(url, match=True):
 if __name__ == "__main__":
     # if "local" was passed in as an argument, use the local server
     url_ = SERVER_URL
-    match = True
+    match_ = True
     if "local" in sys.argv:
         print("Using local server")
         url_ = LOCAL_URL
 
     if "nonmatch" in sys.argv:
-        match = False
+        match_ = False
 
-    send_images(url_, match=match)
+    send_images(url_, match=match_)
