@@ -1,3 +1,4 @@
+
 FROM python:3.9 
 
 # Copy requirements file and install dependencies
@@ -10,6 +11,7 @@ RUN pip install numpy==1.26.2
 RUN pip install opencv-python-headless
 RUN pip install pandas==2.1.1
 RUN pip install Pillow==10.1.0
+
 # Copy your code into the container
 COPY facial-recognition-client facial-recognition-client
 
