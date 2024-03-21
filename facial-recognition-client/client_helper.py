@@ -9,6 +9,7 @@ import threading
 import json
 import os
 import cv2
+import time
 
 os.chdir(os.path.dirname(__file__))
 
@@ -48,6 +49,9 @@ class RapidFaceFollow:
             self.q.put(frame)
 
     def read(self, retry_attempts=5, retry_interval=1):
+        """
+        Retrieve the most recent frame from the camera.
+        """
         for attempt in range(retry_attempts):
             try:
                 return self.q.get()
@@ -55,10 +59,7 @@ class RapidFaceFollow:
                 time.sleep(retry_interval)
 
         raise queue.Empty("No frames available")
-        """
-        Retrieve the most recent frame from the camera.
-        """
-        return self.q.get()
+
 
     def close(self):
         """
