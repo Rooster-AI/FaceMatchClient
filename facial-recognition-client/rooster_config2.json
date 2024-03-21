@@ -1,11 +1,11 @@
 {
     "camera-connection": {
         "protocol": "rtsp",
-        "camera_ip": "192.168.0.176",
+        "camera_ip": "192.168.0.129",
         "camera_user": "ROOSTEROFFICECAM",
         "camera_pass": "ROOSTEROFFICECAM",
         "camera_port": "554",
         "camera_extra_url": "rtsp://IPAddress/stream1"
     },
-    "device_id": 1
+    "device_id": 3
 }
