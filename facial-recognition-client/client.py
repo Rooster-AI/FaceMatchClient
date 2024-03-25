@@ -135,6 +135,7 @@ def process_frame_for_face_recognition(
     try:
         frame = feed.read()
     except queue.Empty:
+        print("No frames available")
         log(f"No frames available, device: {DEVICE_ID}", "IMPORTANT")
         return face_mode, frame_group, send_signals
     if face_mode:
