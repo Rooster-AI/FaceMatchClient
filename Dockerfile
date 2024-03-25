@@ -1,7 +1,10 @@
-FROM python:3.9
+
+FROM python:3.9 
+
 # Copy requirements file and install dependencies
 
 # Install dependencies individually to optimize caching
+RUN pip install tensorflow==2.12
 RUN pip install "git+https://github.com/Rooster-Ai/rooster-deepface.git"
 RUN pip install Flask==2.2.2
 RUN pip install numpy==1.26.2

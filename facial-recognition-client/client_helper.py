@@ -9,6 +9,7 @@ import threading
 import json
 import os
 import cv2
+import time
 
 os.chdir(os.path.dirname(__file__))
 
@@ -20,7 +21,7 @@ class RapidFaceFollow:
 
     def __init__(self):
         # Load camera config from json
-        with open("rooster_config.json", "r", encoding="utf-8") as f:
+        with open("rooster_config2.json", "r", encoding="utf-8") as f:
             data = json.load(f)["camera-connection"]
 
         camera_url = (
@@ -47,11 +48,18 @@ class RapidFaceFollow:
 
             self.q.put(frame)
 
-    def read(self):
+    def read(self, retry_attempts=5, retry_interval=1):
         """
         Retrieve the most recent frame from the camera.
         """
-        return self.q.get()
+        for attempt in range(retry_attempts):
+            try:
+                return self.q.get()
+            except queue.Empty:
+                time.sleep(retry_interval)
+            
+        raise queue.Empty("No frames available")
+
 
     def close(self):
         """
