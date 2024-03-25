@@ -1,3 +1,4 @@
+# pylint: disable=R0913, C0301
 """
 This module provides a class `RapidFaceFollow` for capturing video frames from an IP camera,
 keeping only the most recent frame, and making it available for further processing. It uses
@@ -6,7 +7,6 @@ OpenCV to access the camera feed and manage the frame queue.
 
 import queue
 import threading
-import json
 import os
 import time
 import cv2
@@ -19,14 +19,9 @@ class RapidFaceFollow:
     RapidFaceFollow class
     """
 
-    def __init__(self):
-        # Load camera config from json
-        with open("rooster_config.json", "r", encoding="utf-8") as f:
-            data = json.load(f)["camera-connection"]
-
+    def __init__(self, protocol, camera_user, camera_pass, camera_ip, camera_port, camera_extra_url):
         camera_url = (
-            f'{data["protocol"]}://{data["camera_user"]}:{data["camera_pass"]}'
-            f'@{data["camera_ip"]}:{data["camera_port"]}{data["camera_extra_url"]}'
+            f'{protocol}://{camera_user}:{camera_pass}@{camera_ip}:{camera_port}{camera_extra_url}'
         )
         self.cap = cv2.VideoCapture(camera_url)
         self.q = queue.Queue()
