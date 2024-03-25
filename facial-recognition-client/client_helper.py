@@ -48,6 +48,18 @@ class RapidFaceFollow:
 
             self.q.put(frame)
 
+    def read(self, retry_attempts=5, retry_interval=1):
+        """
+        Retrieve the most recent frame from the camera.
+        """
+        for attempt in range(retry_attempts):
+            try:
+                return self.q.get()
+            except queue.Empty:
+                time.sleep(retry_interval)
+            
+        raise queue.Empty("No frames available")
+
 
     def close(self):
         """
