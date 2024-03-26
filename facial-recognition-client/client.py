@@ -48,8 +48,8 @@ FRAME_GROUP_SIZE = 12
 MODEL = "ArcFace"
 BACKEND = "mtcnn"
 DB = "data/database"
-SERVER_URL = "http://13.56.83.102:5000/upload-images"
-
+# SERVER_URL = "http://13.56.83.102:5000/upload-images"
+SERVER_URL = "http://172.28.188.62:5000/upload-images"
 LOCAL_URL = "http://127.0.0.1:5000/upload-images"
 
 DEVICE_ID = os.environ['DEVICE_ID']
@@ -172,7 +172,7 @@ def manage_communication_with_server(frame_group, send_signals, executor):
     """
     if "FINISHED_2" in send_signals and "FINISHED_5" in send_signals:
         if "MATCHED" in send_signals:
-            print("Matched, sending to server")
+            print(f"Matched, sending to server")
             log(f"Matched, sending to server. DEVICE ID:{DEVICE_ID}", "INFO")
             executor.submit(send_images, frame_group[:])
             frame_group.clear()
