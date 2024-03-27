@@ -4,9 +4,7 @@
 """
 
 import os
-import time
 import requests
-import schedule
 
 os.chdir(os.path.dirname(__file__))
 from remote_logger import log
@@ -44,10 +42,4 @@ def update_database():
 
 
 if __name__ == "__main__":
-    # Schedule the job to run every midnight
-    schedule.every().day.at("00:00").do(update_database)
-
-    # Run the scheduler indefinitely
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    update_database()
