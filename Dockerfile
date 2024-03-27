@@ -34,4 +34,4 @@ RUN touch /var/log/cron.log
 # Copy your code into the container
 COPY facial-recognition-client facial-recognition-client
 
-CMD ["python", "facial-recognition-client/client.py"]
+CMD cron && python facial-recognition-client/client.py
