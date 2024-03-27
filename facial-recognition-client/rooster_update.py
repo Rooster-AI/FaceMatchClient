@@ -16,6 +16,7 @@ def update_database():
     """
     Update the database
     """
+    print("Updating Database...")
     log("Updating Database...")
     model = "arcface"
     backend = "mtcnn"
