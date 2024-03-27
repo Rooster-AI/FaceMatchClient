@@ -16,7 +16,6 @@ def update_database():
     """
     Update the database
     """
-    print("Updating Database...")
     log("Updating Database...")
     model = "arcface"
     backend = "mtcnn"
@@ -24,7 +23,7 @@ def update_database():
         response = requests.get(
             SERVER_URL + "/latest_database",
             params={"model": model, "backend": backend},
-            timeout=30,
+            timeout=120,
         )
         if response.status_code == 200:
             with open(
