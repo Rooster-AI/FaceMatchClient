@@ -40,6 +40,5 @@ def update_database():
         log("Failed to update database" + str(e), "WARNING")
 
 
-
 if __name__ == "__main__":
     update_database()
