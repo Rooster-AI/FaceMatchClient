@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Extract variables from camera.json
-camera_json="FaceMatchClient/facial-recognition-client/rooster_config.json"
+camera_json="./facial-recognition-client/rooster_config.json"
 protocol=$(jq -r '.["camera-connection"].protocol' "$camera_json")
 camera_ip=$(jq -r '.["camera-connection"].camera_ip' "$camera_json")
 camera_user=$(jq -r '.["camera-connection"].camera_user' "$camera_json")
