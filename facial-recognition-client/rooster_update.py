@@ -26,6 +26,8 @@ def update_database():
             timeout=120,
         )
         print(response)
+        print(response.headers)
+        print(response.content)
         if response.status_code == 200:
             with open(
                 f"./data/database/representations_{model}_{backend}.pkl", "wb"
