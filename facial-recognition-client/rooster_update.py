@@ -9,7 +9,7 @@ import requests
 os.chdir(os.path.dirname(__file__))
 from remote_logger import log
 
-SERVER_URL = "http://13.56.83.102:5000"
+SERVER_URL = "http://172.28.207.116:5000"
 
 
 def update_database():
@@ -25,9 +25,6 @@ def update_database():
             params={"model": model, "backend": backend},
             timeout=120,
         )
-        print(response)
-        print(response.headers)
-        print(response.content)
         if response.status_code == 200:
             with open(
                 f"./data/database/representations_{model}_{backend}.pkl", "wb"
