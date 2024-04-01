@@ -32,18 +32,44 @@ class RapidFaceFollow:
     # read frames as soon as they are available, keeping only most recent one
     def _reader(self):
         while True:
-            ret, frame = self.cap.read()
-            if not ret:
-                continue
-            if not self.q.empty():
-                try:
-                    self.q.get_nowait()  # discard previous (unprocessed) frame
-                except queue.Empty:
-                    pass
+            try:
+                ret, frame = self.cap.read()
+                if not ret:
+                    raise Exception("Failed to capture frame")
 
-            self.q.put(frame)
+                if not self.q.empty():
+                    try:
+                        self.q.get_nowait()  # discard previous (unprocessed) frame
+                    except queue.Empty:
+                        pass
 
-    def read(self, retry_attempts=5, retry_interval=1):
+                self.q.put(frame)
+
+            except Exception as exp:
+                print(f"Error capturing frame: {exp}. Attempting the reconnect...")
+                self._reconnect()
+
+    def _reconnect(self):
+        """Attempt to reconnect to the camera."""
+        self.cap.release()
+        connection_attempts = 0
+        backoff = 1
+        while connection_attempts < 10:
+            try:
+                self.cap = cv2VideoCapture(self.camera_url)
+                if self.cap.isOpened():
+                    print("Reconnected to camera successfully.")
+                    break
+            except Exception as exp:
+                print(f"Reconnection attempt {connection_attempts+1} failed: {exp}")
+
+            time.sleep(backoff)
+            print(f"Waiting {backoff} seconds before next reconnection attempt...")
+            backoff *= 2
+
+            connection_attempts += 1
+
+    def read(self, retry_attempts=3, retry_interval=1):
         """
         Retrieve the most recent frame from the camera.
         """
