@@ -9,13 +9,14 @@ import requests
 os.chdir(os.path.dirname(__file__))
 from remote_logger import log
 
-SERVER_URL = "http://localhost:5000"
+SERVER_URL = "http://13.56.83.102:5000"
 
 
 def update_database():
     """
     Update the database
     """
+    log("Updating Database...")
     model = "arcface"
     backend = "mtcnn"
     try:
@@ -37,7 +38,6 @@ def update_database():
 
     except Exception as e:
         log("Failed to update database" + str(e), "WARNING")
-
 
 
 if __name__ == "__main__":
