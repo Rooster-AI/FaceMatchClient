@@ -9,7 +9,7 @@ import requests
 os.chdir(os.path.dirname(__file__))
 from remote_logger import log
 
-SERVER_URL = "http://172.28.207.116:5000"
+SERVER_URL = "http://13.56.83.102:5000"
 
 
 def update_database():
@@ -23,7 +23,7 @@ def update_database():
         response = requests.get(
             SERVER_URL + "/latest_database",
             params={"model": model, "backend": backend},
-            timeout=120,
+            timeout=30,
         )
         if response.status_code == 200:
             with open(
