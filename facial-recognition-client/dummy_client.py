@@ -48,7 +48,7 @@ def send_images(url, match=True):
         jt = base64.b64encode(buffer).decode()
         encoded_images.append(jt)
 
-    data = json.dumps({"images": encoded_images, "device_id": 1})
+    data = json.dumps({"images": encoded_images, "device_id": 4})
     try:
         response = requests.post(
             url,
